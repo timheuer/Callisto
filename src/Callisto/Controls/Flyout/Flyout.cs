@@ -375,22 +375,23 @@ namespace Callisto.Controls
             PopInThemeAnimation popin = new PopInThemeAnimation();
 
             // TODO: Switch statement begs of refactoring
+            int offset = 40;
             switch (this.Placement)
             {
                 case PlacementMode.Bottom:
-                    popin.FromVerticalOffset = -10;
+                    popin.FromVerticalOffset = -1 * offset;
                     popin.FromHorizontalOffset = 0;
                     break;
                 case PlacementMode.Left:
                     popin.FromVerticalOffset = 0;
-                    popin.FromHorizontalOffset = 10;
+                    popin.FromHorizontalOffset = offset;
                     break;
                 case PlacementMode.Right:
                     popin.FromVerticalOffset = 0;
-                    popin.FromHorizontalOffset = -10;
+                    popin.FromHorizontalOffset = -1 * offset;
                     break;
                 case PlacementMode.Top:
-                    popin.FromVerticalOffset = 10;
+                    popin.FromVerticalOffset = offset;
                     popin.FromHorizontalOffset = 0;
                     break;
             }
@@ -488,12 +489,13 @@ namespace Callisto.Controls
             set { SetValue(IsOpenProperty, value); }
         }
         public static readonly DependencyProperty IsOpenProperty =
-            DependencyProperty.Register("IsOpen", typeof(bool), typeof(Menu), new PropertyMetadata(false, (obj, args) =>
+            DependencyProperty.Register("IsOpen", typeof(bool), typeof(Flyout), new PropertyMetadata(false, (obj, args) =>
             {
                 if (args.NewValue != args.OldValue)
                 {
-                    Flyout f = (Flyout)obj;
-                    f._hostPopup.IsOpen = (bool)args.NewValue;
+                    var f = (Flyout)obj;
+                    var shouldOpen = (bool)args.NewValue;
+                    f._hostPopup.IsOpen = shouldOpen;
                 }
             }));
 
@@ -504,7 +506,7 @@ namespace Callisto.Controls
         }
 
         public static readonly DependencyProperty PlacementTargetProperty =
-            DependencyProperty.Register("PlacementTarget", typeof(UIElement), typeof(Menu), null);
+            DependencyProperty.Register("PlacementTarget", typeof(UIElement), typeof(Flyout), null);
 
         public Windows.UI.Xaml.Controls.Primitives.PlacementMode Placement
         {
@@ -513,7 +515,7 @@ namespace Callisto.Controls
         }
 
         public static readonly DependencyProperty PlacementProperty =
-            DependencyProperty.Register("Placement", typeof(Windows.UI.Xaml.Controls.Primitives.PlacementMode), typeof(Menu), null);
+            DependencyProperty.Register("Placement", typeof(Windows.UI.Xaml.Controls.Primitives.PlacementMode), typeof(Flyout), null);
 
         public double HorizontalOffset
         {
@@ -522,7 +524,7 @@ namespace Callisto.Controls
         }
 
         public static readonly DependencyProperty HorizontalOffsetProperty =
-            DependencyProperty.Register("HorizontalOffset", typeof(double), typeof(Menu), new PropertyMetadata(0.0));
+            DependencyProperty.Register("HorizontalOffset", typeof(double), typeof(Flyout), new PropertyMetadata(0.0));
 
         public double VerticalOffset
         {
@@ -531,7 +533,7 @@ namespace Callisto.Controls
         }
 
         public static readonly DependencyProperty VerticalOffsetProperty =
-            DependencyProperty.Register("VerticalOffset", typeof(double), typeof(Menu), new PropertyMetadata(0.0));
+            DependencyProperty.Register("VerticalOffset", typeof(double), typeof(Flyout), new PropertyMetadata(0.0));
         #endregion Dependency Properties
     }
 }
