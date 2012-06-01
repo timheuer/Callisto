@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Callisto.Controls
 {
@@ -46,13 +47,13 @@ namespace Callisto.Controls
 
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) return;
 
-            Window.Current.Activated += OnCurrentWindowActivated;
-
             _windowBounds = Window.Current.Bounds;
 
             this.Loaded += OnLoaded;
 
             _hostPopup = new Popup();
+            _hostPopup.ChildTransitions = new TransitionCollection();
+            _hostPopup.ChildTransitions.Add(new PaneThemeTransition());
             _hostPopup.Closed += OnHostPopupClosed;
             _hostPopup.IsLightDismissEnabled = true;
             _hostPopup.Height = _windowBounds.Height;
@@ -64,6 +65,7 @@ namespace Callisto.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            Window.Current.Activated += OnCurrentWindowActivated;
             _hostPopup.Width = (this.FlyoutWidth == SettingsFlyoutWidth.Wide) ? 646 : 346;
             this.Width = _hostPopup.Width;
             _hostPopup.SetValue(Canvas.LeftProperty, _windowBounds.Width - (double)this.FlyoutWidth);
@@ -83,6 +85,11 @@ namespace Callisto.Controls
             _hostPopup.Child = null;
             Window.Current.Activated -= OnCurrentWindowActivated;
             this.Content = null;
+
+            if (null != Closed)
+            {
+                Closed(this, e);
+            }
         }
 
         void OnCurrentWindowActivated(object sender, Windows.UI.Core.WindowActivatedEventArgs e)
@@ -150,6 +157,10 @@ namespace Callisto.Controls
             DependencyProperty.Register("SmallLogoImageSource", typeof(ImageSource), typeof(SettingsFlyout), null);
         
         #endregion Dependency Properties
+
+        #region Events
+        public event EventHandler<object> Closed;
+        #endregion
 
         #region Enums
         public enum SettingsFlyoutWidth

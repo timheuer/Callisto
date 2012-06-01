@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using UIElementLeakTester;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -44,7 +45,6 @@ namespace Callisto.TestApp
 			if (Samples == null)
 			{
 				Samples = new List<SamplePage>();
-				Samples.Add(new SamplePage() { Name = "BlankPage", Page = typeof(XamlControlsUITestApp.BlankPage) });
 				Samples.Add(new SamplePage() { Name = "Flyout", Page = typeof(SamplePages.FlyoutSample) });
 				Samples.Add(new SamplePage() { Name = "Settings", Page = typeof(SamplePages.SettingsSample) });
 				Samples.Add(new SamplePage() { Name = "Tilt Effect", Page = typeof(SamplePages.TiltSample) });
@@ -58,5 +58,10 @@ namespace Callisto.TestApp
 			var pagetype = ((sender as ListBox).SelectedItem as SamplePage).Page;
 			MainFrame.Navigate(pagetype);
 		}
+
+        private void Image_PointerPressed_1(object sender, PointerRoutedEventArgs e)
+        {
+            ObjectTracker.GarbageCollect();
+        }
 	}
 }
