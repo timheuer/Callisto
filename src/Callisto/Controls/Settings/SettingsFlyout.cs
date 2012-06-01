@@ -45,6 +45,8 @@ namespace Callisto.Controls
         {
             this.DefaultStyleKey = typeof(SettingsFlyout);
 
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) return;
+
             _windowBounds = Window.Current.Bounds;
 
             this.Loaded += OnLoaded;
