@@ -90,7 +90,10 @@ namespace Callisto.Controls
             {
                 _hostPopup.IsOpen = false;
             }
-            SettingsPane.Show();
+            if (this.ShowSettingsPaneOnClose)
+            {
+                SettingsPane.Show();
+            }
         }
         
         void OnHostPopupClosed(object sender, object e)
@@ -130,6 +133,15 @@ namespace Callisto.Controls
                         f._hostPopup.IsOpen = (bool)args.NewValue;
                     }
                 }));
+
+        public bool ShowSettingsPaneOnClose
+        {
+            get { return (bool)GetValue(ShowSettingsPaneOnCloseProperty); }
+            set { SetValue(ShowSettingsPaneOnCloseProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowSettingsPaneOnCloseProperty =
+            DependencyProperty.Register("ShowSettingsPaneOnClose", typeof(bool), typeof(SettingsFlyout), new PropertyMetadata(true));
 
         public SolidColorBrush HeaderBrush
         {
