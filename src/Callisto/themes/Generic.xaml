@@ -437,11 +437,12 @@ limitations under the License.-->
         <Setter Property="Background" Value="{StaticResource ApplicationPageBackgroundThemeBrush}" />
         <Setter Property="HeaderBrush" Value="{StaticResource SettingsFlyoutHeaderBackgroundBrush}" />
         <Setter Property="HeaderText" Value="{StaticResource SettingsFlyoutHeaderTextDefault}" />
+        <Setter Property="BorderThickness" Value="1,0,0,0" />
         <Setter Property="MaxWidth" Value="646" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:SettingsFlyout">
-                    <Border BorderBrush="{TemplateBinding HeaderBrush}" BorderThickness="0,0,0,0" VerticalAlignment="Stretch">
+                    <Border BorderBrush="{TemplateBinding HeaderBrush}" BorderThickness="{TemplateBinding BorderThickness}" VerticalAlignment="Stretch">
                         <Grid Background="{TemplateBinding Background}" VerticalAlignment="Stretch" >
                             <!-- Root grid definition -->
                             <Grid.RowDefinitions>
