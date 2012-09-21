@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -114,8 +114,9 @@ namespace Callisto.TestApp.SamplePages
 			Flyout f = new Flyout();
 
 			Border b = new Border();
-			b.Width = 300;
-			b.Height = 125;
+			//b.Width = 300;
+			//b.Height = 125;
+			var sp = new StackPanel();
 
 			TextBlock tb = new TextBlock();
             tb.HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center;
@@ -123,8 +124,11 @@ namespace Callisto.TestApp.SamplePages
             tb.TextWrapping = TextWrapping.Wrap;
 			tb.FontSize = 24.667;
 			tb.Text = "This is a basic ContentControl so put anything you want in here.";
-
-			b.Child = tb;
+			sp.Children.Add(tb);
+			Button btn = new Button() { Content = new TextBlock() { Text = "Resize" } };
+			btn.Click += (s, a) => btn.Height = btn.ActualHeight + 20;
+			sp.Children.Add(btn);
+			b.Child = sp;
 
 			f.Content = b;
 
