@@ -1,4 +1,4 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2012 Tim Heuer
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
@@ -83,6 +83,7 @@ namespace Callisto.Controls
             _hostPopup.Opened += OnHostPopupOpened;
             _hostPopup.IsLightDismissEnabled = true;
             _hostPopup.Child = this;
+			SizeChanged += Flyout_SizeChanged;
         }
 
         private void OnCurrentWindowActivated(object sender, Windows.UI.Core.WindowActivatedEventArgs e)
@@ -94,27 +95,23 @@ namespace Callisto.Controls
         }
 
         #region Methods and Events
-
-
-	protected override Size MeasureOverride(Size availableSize)
-	{
-		if (Content is UIElement)
+		
+		private void Flyout_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			(Content as UIElement).Measure(availableSize);
-			return (Content as UIElement).DesiredSize;
+			PerformPlacement(this.HorizontalOffset, this.VerticalOffset, (e.PreviousSize.Width == 0 || e.PreviousSize.Height == 0));
 		}
-		else
-			return base.MeasureOverride(availableSize);
-	}
 
         private void OnHostPopupOpened(object sender, object e)
-        {  
+        {
+            if (_hostPopup.ActualHeight == 0 || _hostPopup.ActualWidth == 0)
+            {
+				return; //Wait for Flyout_SizeChanged
+            }
+
             _hostPopup.HorizontalOffset = this.HorizontalOffset;
             _hostPopup.VerticalOffset = this.VerticalOffset;
 
-            Measure(new Size(Double.PositiveInfinity, double.PositiveInfinity));
-
-            PerformPlacement(this.HorizontalOffset, this.VerticalOffset);
+            PerformPlacement(this.HorizontalOffset, this.VerticalOffset, true);
         }
 
         private static Rect GetBounds(params Point[] interestPoints)
@@ -302,7 +299,7 @@ namespace Callisto.Controls
             return pointArray;
         }
 
-        private void PerformPlacement(double horizontalOffset, double verticalOffset)
+        private void PerformPlacement(double horizontalOffset, double verticalOffset, bool animate)
         {
             double x = 0.0;
             double y = 0.0;
@@ -369,34 +366,37 @@ namespace Callisto.Controls
             _hostPopup.IsHitTestVisible = true;
             _hostPopup.Opacity = 1;
 
-            // for entrance animation
-            // UX guidelines show a PopIn animation
-            Storyboard inAnimation = new Storyboard();
-            PopInThemeAnimation popin = new PopInThemeAnimation();
+			if (animate)
+			{
+				// for entrance animation
+				// UX guidelines show a PopIn animation
+				Storyboard inAnimation = new Storyboard();
+				PopInThemeAnimation popin = new PopInThemeAnimation();
 
-            // TODO: Switch statement begs of refactoring
-            switch (this.Placement)
-            {
-                case PlacementMode.Bottom:
-                    popin.FromVerticalOffset = -10;
-                    popin.FromHorizontalOffset = 0;
-                    break;
-                case PlacementMode.Left:
-                    popin.FromVerticalOffset = 0;
-                    popin.FromHorizontalOffset = 10;
-                    break;
-                case PlacementMode.Right:
-                    popin.FromVerticalOffset = 0;
-                    popin.FromHorizontalOffset = -10;
-                    break;
-                case PlacementMode.Top:
-                    popin.FromVerticalOffset = 10;
-                    popin.FromHorizontalOffset = 0;
-                    break;
-            }
-            Storyboard.SetTarget(popin, _hostPopup);
-            inAnimation.Children.Add(popin);
-            inAnimation.Begin();
+				// TODO: Switch statement begs of refactoring
+				switch (this.Placement)
+				{
+					case PlacementMode.Bottom:
+						popin.FromVerticalOffset = -10;
+						popin.FromHorizontalOffset = 0;
+						break;
+					case PlacementMode.Left:
+						popin.FromVerticalOffset = 0;
+						popin.FromHorizontalOffset = 10;
+						break;
+					case PlacementMode.Right:
+						popin.FromVerticalOffset = 0;
+						popin.FromHorizontalOffset = -10;
+						break;
+					case PlacementMode.Top:
+						popin.FromVerticalOffset = 10;
+						popin.FromHorizontalOffset = 0;
+						break;
+				}
+				Storyboard.SetTarget(popin, _hostPopup);
+				inAnimation.Children.Add(popin);
+				inAnimation.Begin();
+			}
         }
 
         #region Offset Calculations
