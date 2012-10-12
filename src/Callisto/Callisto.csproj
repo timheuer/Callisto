@@ -150,6 +150,11 @@
     <Compile Include="Extensions\WebViewExtension.cs" />
     <Compile Include="OAuth\OAuthHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsManagement\AppSettings.cs" />
+    <Compile Include="SettingsManagement\INotifySettingChanged.cs" />
+    <Compile Include="SettingsManagement\ISettingsCommandInfo.cs" />
+    <Compile Include="SettingsManagement\SettingChangedEventArgs.cs" />
+    <Compile Include="SettingsManagement\SettingsCommandInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="LocalizedStrings\en-US\Resources.resw">
