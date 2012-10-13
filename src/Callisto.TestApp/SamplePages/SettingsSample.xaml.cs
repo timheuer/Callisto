@@ -22,41 +22,41 @@ using XamlControlsUITestApp;
 
 namespace Callisto.TestApp.SamplePages
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
-	public sealed partial class SettingsSample : Page
-	{
-		public SettingsSample()
-		{
-			this.InitializeComponent();
-		}
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class SettingsSample : Page
+    {
+        public SettingsSample()
+        {
+            this.InitializeComponent();
+        }
 
-		/// <summary>
-		/// Invoked when this page is about to be displayed in a Frame.
-		/// </summary>
-		/// <param name="e">Event data that describes how this page was reached.  The Parameter
-		/// property is typically used to configure the page.</param>
-		protected override void OnNavigatedTo(NavigationEventArgs e)
-		{
-			settingswidth.SelectedIndex = 0;
-			SettingsPane.GetForCurrentView().CommandsRequested += BlankPage_CommandsRequested;
-		}
+        /// <summary>
+        /// Invoked when this page is about to be displayed in a Frame.
+        /// </summary>
+        /// <param name="e">Event data that describes how this page was reached.  The Parameter
+        /// property is typically used to configure the page.</param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            settingswidth.SelectedIndex = 0;
+            SettingsPane.GetForCurrentView().CommandsRequested += BlankPage_CommandsRequested;
+        }
 
-		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-		{
-			SettingsPane.GetForCurrentView().CommandsRequested -= BlankPage_CommandsRequested;
-			base.OnNavigatingFrom(e);
-		}
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            SettingsPane.GetForCurrentView().CommandsRequested -= BlankPage_CommandsRequested;
+            base.OnNavigatingFrom(e);
+        }
 
-		private void BlankPage_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
-		{
-			SettingsCommand cmd = new SettingsCommand("sample", "Sample Custom Setting", (x) =>
-			{
+        private void BlankPage_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            SettingsCommand cmd = new SettingsCommand("sample", "Sample Custom Setting", (x) =>
+            {
                 // create a new instance of the flyout
-				SettingsFlyout settings = new SettingsFlyout();
+                SettingsFlyout settings = new SettingsFlyout();
                 // set the desired width.  If you leave this out, you will get Narrow (346px)
-				settings.FlyoutWidth = (Callisto.Controls.SettingsFlyout.SettingsFlyoutWidth)Enum.Parse(typeof(Callisto.Controls.SettingsFlyout.SettingsFlyoutWidth), settingswidth.SelectionBoxItem.ToString());
+                settings.FlyoutWidth = (Callisto.Controls.SettingsFlyout.SettingsFlyoutWidth)Enum.Parse(typeof(Callisto.Controls.SettingsFlyout.SettingsFlyoutWidth), settingswidth.SelectionBoxItem.ToString());
                 
                 // optionally change header and content background colors away from defaults (recommended)
                 // if using Callisto's AppManifestHelper you can grab the element from some member var you held it in
@@ -72,19 +72,19 @@ namespace Callisto.TestApp.SamplePages
                 settings.Content = new SettingsContent();
 
                 // open it
-				settings.IsOpen = true;
+                settings.IsOpen = true;
 
                 // this is only for the test app and not needed
                 // you would not use this code in your real app
-				ObjectTracker.Track(settings);
-			});
+                ObjectTracker.Track(settings);
+            });
 
-			args.Request.ApplicationCommands.Add(cmd);
-		}
+            args.Request.ApplicationCommands.Add(cmd);
+        }
 
-		private void ShowSettings(object sender, RoutedEventArgs e)
-		{
-			SettingsPane.Show();
-		}
-	}
+        private void ShowSettings(object sender, RoutedEventArgs e)
+        {
+            SettingsPane.Show();
+        }
+    }
 }
