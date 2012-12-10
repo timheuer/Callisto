@@ -1,4 +1,5 @@
-﻿//-----------------------------------------------------------------------
+﻿using Callisto.Controls.Common;
+//-----------------------------------------------------------------------
 // <copyright file="DynamicTextBlock.cs" company="Pixel Lab">
 //    Copyright (c) 2009 Pixel Lab
 //
@@ -158,6 +159,21 @@ namespace Callisto.Controls
 
         #endregion
 
+        #region TruncationStrategy (DependencyProperty)
+        /// <summary>
+        /// Gets or sets the TruncationProperty DependencyProperty. This controls where truncation occurs.
+        /// </summary>
+        public TruncationStrategy Truncation
+        {
+            get { return (TruncationStrategy)GetValue(TruncationProperty); }
+            set { SetValue(TruncationProperty, value); }
+        }
+        public static readonly DependencyProperty TruncationProperty =
+            DependencyProperty.Register("Truncation", typeof(TruncationStrategy), typeof(DynamicTextBlock),
+            new PropertyMetadata(TruncationStrategy.Tail));
+        
+        #endregion
+
         /// <summary>
         /// A TextBlock that gets set as the control's content and is ultiately the control 
         /// that displays our text
@@ -200,7 +216,7 @@ namespace Callisto.Controls
                 
                 if (reducedText.Length > 0)
                 {
-                    reducedText = this.ReduceText(reducedText);    
+                    reducedText = this.ReduceText(reducedText);
                 }
                 
                 if (reducedText.Length == prevLength)
@@ -208,7 +224,7 @@ namespace Callisto.Controls
                     break;
                 }
 
-                this.textBlock.Text = reducedText + "...";
+                this.textBlock.Text = ApplyEllipsis(reducedText);
                 textSize = base.MeasureOverride(unboundSize);
             }
 
@@ -223,7 +239,73 @@ namespace Callisto.Controls
         /// <returns>the reduced length text</returns>
         protected virtual string ReduceText(string text)
         {
-            return text.Substring(0, text.Length - 1);
+            switch (Truncation)
+            {
+                case TruncationStrategy.Head:
+                    return text.Substring(1, text.Length - 1);
+                case TruncationStrategy.Middle:
+                    return ReduceTextMiddle(text);
+                case TruncationStrategy.Tail:
+                default:
+                    return text.Substring(0, text.Length - 1);
+            }
+        }
+
+        /// <summary>
+        /// Applies ellipsis transformation. Derived classes can override this to use different techniques 
+        /// for transforming reduced text.
+        /// </summary>
+        /// <param name="text">the reduced text</param>
+        /// <returns>the transformed string</returns>
+        protected virtual string ApplyEllipsis(string text)
+        {
+            string transformedText;
+            switch (Truncation)
+            {
+                case TruncationStrategy.Head:
+                    transformedText = "..." + text;
+                    break;
+                case TruncationStrategy.Middle:
+                    transformedText = _middleTrimBegin + "..." + _middleTrimEnd;
+                    _middleTrimBegin = null;
+                    _middleTrimEnd = null;
+                    break;
+                case TruncationStrategy.Tail:
+                default:
+                    transformedText = text + "...";
+                    break;
+            }
+
+            return transformedText;
+        }
+
+        #region Middle truncation
+
+        protected string _middleTrimBegin = null;
+        protected string _middleTrimEnd = null;
+        protected bool _trimRight = false;
+        /// <summary>
+        /// Text reduction specific for middle truncation. Derived classes can override
+        /// this to use different techniques, such as applying trim's.
+        /// </summary>
+        /// <param name="text">text to be reduced</param>
+        /// <returns>the reduced string length</returns>
+        protected virtual string ReduceTextMiddle(string text)
+        {
+            int middle = text.Length/2;
+            _trimRight = !_trimRight;
+            _middleTrimBegin = text.Substring(0, _trimRight ? middle : middle - 1);
+            _middleTrimEnd = text.Substring(_trimRight ? middle + 1 : middle);
+            return _middleTrimBegin + _middleTrimEnd;
+        }
+
+        #endregion
+
+        public enum TruncationStrategy
+        {
+            Head,
+            Middle,
+            Tail
         }
     }
 }
