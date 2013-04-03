@@ -148,6 +148,9 @@
     <Compile Include="SamplePages\NumericUpDownSample.xaml.cs">
       <DependentUpon>NumericUpDownSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SamplePages\OAuthTwitterSample.xaml.cs">
+      <DependentUpon>OAuthTwitterSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SamplePages\RatingControl.xaml.cs">
       <DependentUpon>RatingControl.xaml</DependentUpon>
     </Compile>
@@ -220,6 +223,10 @@
     <Page Include="SamplePages\FlipViewIndicatorSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SamplePages\OAuthTwitterSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SamplePages\SettingsContent.xaml">
       <SubType>Designer</SubType>
