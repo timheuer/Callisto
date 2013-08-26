@@ -3,20 +3,47 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Callisto.TestApp.SamplePages"
+     xmlns:TS="using:Callisto.TestApp.TemplateSelectors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
      xmlns:callisto="using:Callisto.Controls"
 	mc:Ignorable="d">
 
-	<Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="FrontTemplate">
+            <Image Stretch="UniformToFill" >
+                <Image.Source>
+                    <BitmapImage UriSource="{Binding ImageUri}" />
+                </Image.Source>
+            </Image>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BackTemplate">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock FontWeight="Bold" Text="{Binding Title}" />
+                <TextBlock Text="{Binding Text}" Grid.Row="1"/>
+            </Grid>
+        </DataTemplate>
+
+        <TS:LiveTileTemplateSelector x:Key="LiveTileTemplateSelector" Front="{StaticResource FrontTemplate}" Back="{StaticResource BackTemplate}" />
+    </Page.Resources>
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="245" />
 			<ColumnDefinition Width="155" />
+            <ColumnDefinition Width="155" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="155" />
 			<RowDefinition Height="155" />
+            <RowDefinition Height="155" />
 			<RowDefinition Height="155" />
 		</Grid.RowDefinitions>
 
@@ -96,5 +123,10 @@
 				</DataTemplate>
 			</callisto:LiveTile.ItemTemplate>
 		</callisto:LiveTile>
-	</Grid>
+
+        <callisto:LiveTile x:Name="liveTile4"
+                    ItemTemplateSelector="{StaticResource LiveTileTemplateSelector}"
+					Grid.Column="3" Grid.Row="6" Margin="5">
+        </callisto:LiveTile>
+    </Grid>
 </Page>

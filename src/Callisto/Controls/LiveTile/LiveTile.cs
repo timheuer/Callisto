@@ -202,9 +202,9 @@ namespace Callisto.Controls
 					_translate.X = _translate.Y = 0;
 				}
 				if(_currentElement != null)
-					_currentElement.DataContext = GetCurrent();
+                    SetDataContext(_currentElement, GetCurrent());
 				if(_nextElement != null)
-					_nextElement.DataContext = GetNext();
+                    SetDataContext(_nextElement, GetNext());
 			};
 			sb.Begin();
 		}
@@ -250,9 +250,9 @@ namespace Callisto.Controls
 		{
 			_currentIndex = 0;
 			if (_currentElement != null)
-				_currentElement.DataContext = GetCurrent();
+                SetDataContext(_currentElement, GetCurrent());
 			if (_nextElement != null)
-				_nextElement.DataContext = GetNext();
+                SetDataContext(_nextElement, GetNext());
 			if (_timer == null)
 			{
 				_timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
@@ -261,6 +261,15 @@ namespace Callisto.Controls
 			}
 			_timer.Start();
 		}
+
+        private void SetDataContext(FrameworkElement element, object dataContext)
+        {
+            element.DataContext = dataContext;
+            if (ItemTemplateSelector != null)
+            {
+                (element as ContentPresenter).ContentTemplate = ItemTemplateSelector.SelectTemplate(element.DataContext, element);
+            }
+        }
 
 		#endregion
 
@@ -307,6 +316,21 @@ namespace Callisto.Controls
 		/// </summary>
 		public static readonly DependencyProperty ItemTemplateProperty =
 			DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(LiveTile), null);
+
+        /// <summary>
+        /// Identifies the <see cref="ItemTemplateSelector"/> property.
+        /// </summary>
+        public static readonly DependencyProperty ItemTemplateSelectorProperty =
+            DependencyProperty.Register("ItemTemplateSelector", typeof(DataTemplateSelector), typeof(LiveTile), null);
+
+        /// <summary>
+        /// Gets or sets the item template selector
+        /// </summary>
+        public DataTemplateSelector ItemTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty); }
+            set { SetValue(ItemTemplateSelectorProperty, value); }
+        }
 
 		/// <summary>
 		/// Gets or sets the direction the tile slides in.
