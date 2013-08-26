@@ -636,11 +636,11 @@ limitations under the License.-->
                                 <ContentPresenter x:Name="Current"
                                                       DataContext="{x:Null}"
                                                       Content="{Binding}" 
-                                                      ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
+                                                      ContentTemplate="{TemplateBinding ItemTemplate}" />
                                 <ContentPresenter  x:Name="Next" 
                                                       DataContext="{x:Null}"
                                                       Content="{Binding}" 
-                                                      ContentTemplate="{TemplateBinding ItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
+                                                      ContentTemplate="{TemplateBinding ItemTemplate}" />
                             </StackPanel>
                         </Canvas>
                         <Border
