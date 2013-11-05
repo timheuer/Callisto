@@ -29,6 +29,12 @@ namespace Callisto.TestApp.SamplePages
 			public Uri ReadMoreUri { get; set; }
 		}
 
+        public class LiveTileData2
+        {
+            public string Title { get; set; }
+            public string Text { get; set; }
+        }
+
 		public LiveTileSample()
 		{
 			this.InitializeComponent();
@@ -57,7 +63,28 @@ namespace Callisto.TestApp.SamplePages
                 ReadMoreUri = new Uri("http://en.wikipedia.org/wiki/Grasshopper")
             });
 			DataContext = tileData;
-		}
+            this.LoadContentForSelector();
+        }
+
+        private void LoadContentForSelector()
+        {
+            List<object> list = new List<object>();
+            list.Add(new LiveTileData()
+            {
+                Name = "Butterfly",
+                Description = "A butterfly is a mainly day-flying insect of the order Lepidoptera, which includes the butterflies and moths. Like other holometabolous insects, the butterfly's life cycle consists of four parts: egg, larva, pupa and adult.",
+                ImageUri = new Uri("ms-appx:/Images/butterfly.jpg"),
+                ReadMoreUri = new Uri("http://en.wikipedia.org/wiki/Butterfly")
+            });
+            list.Add(new LiveTileData2()
+            {
+                Title = "My Title",
+                Text = "Here my little description"
+            });
+
+            this.liveTile4.ItemsSource = list;
+        }
+
 		private async void OnReadMoreLink_Click(object sender, RoutedEventArgs e)
 		{
 			var link = (sender as FrameworkElement).Tag as Uri;

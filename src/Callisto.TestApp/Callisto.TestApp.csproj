@@ -176,6 +176,7 @@
     <Compile Include="StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TemplateSelectors\LiveTileTemplateSelector.cs" />
     <Compile Include="VisualTreeAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
