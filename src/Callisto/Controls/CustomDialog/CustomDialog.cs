@@ -84,6 +84,7 @@ namespace Callisto.Controls
 
         #region Events
         public event RoutedEventHandler BackButtonClicked;
+        public event DependencyPropertyChangedEventHandler IsOpenChanged;
         #endregion
 
         #region Member Variables
@@ -120,12 +121,17 @@ namespace Callisto.Controls
 
         private static void OnIsOpenPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if ((bool)e.NewValue)
+            var dlg = d as CustomDialog;
+            if (dlg != null)
             {
-                CustomDialog dlg = d as CustomDialog;
-                if (dlg != null)
+                if ((bool)e.NewValue)
                 {
                     dlg.ApplyTemplate();
+                }
+
+                if (dlg.IsOpenChanged != null)
+                {
+                    dlg.IsOpenChanged(d, e);
                 }
             }
         }
