@@ -47,7 +47,7 @@ namespace Callisto.Controls
                         {
                             BackButtonClicked(bbs, bba);
                         }
-                        else
+                        else if(GetBindingExpression(IsOpenProperty) == null)
                         {
                             IsOpen = false;
                         }
