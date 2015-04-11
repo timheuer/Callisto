@@ -15,6 +15,7 @@
 //
 
 using System.Windows.Input;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -76,13 +77,24 @@ namespace Callisto.Controls
                     };
             }
 
+			_inputPane = InputPane.GetForCurrentView();
+			_inputPane.Showing += OnInputPaneShowingOrHiding;
+			_inputPane.Hiding += OnInputPaneShowingOrHiding;
+
             Window.Current.SizeChanged += OnWindowSizeChanged;
             Unloaded += OnUnloaded;
 
             base.OnApplyTemplate();
         }
 
-        private void ResizeContainers()
+		private void OnInputPaneShowingOrHiding(InputPane sender, InputPaneVisibilityEventArgs args)
+		{
+			_rootGrid.Height = Window.Current.Bounds.Height - _inputPane.OccludedRect.Height;
+
+			args.EnsuredFocusedElementInView = true;
+		}
+
+		private void ResizeContainers()
         {
             if (_rootGrid != null)
             {
@@ -100,6 +112,9 @@ namespace Callisto.Controls
 
         private void OnUnloaded(object sender, RoutedEventArgs routedEventArgs)
         {
+			_inputPane.Showing -= OnInputPaneShowingOrHiding;
+			_inputPane.Hiding -= OnInputPaneShowingOrHiding;
+
             Unloaded -= OnUnloaded;
             Window.Current.SizeChanged -= OnWindowSizeChanged;
         }
@@ -115,6 +130,7 @@ namespace Callisto.Controls
         private Grid _rootGrid;
         private Border _rootBorder;
         private Button _backButton;
+		private InputPane _inputPane;
         #endregion
 
         #region Constants
