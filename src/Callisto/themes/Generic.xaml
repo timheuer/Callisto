@@ -1329,7 +1329,7 @@ limitations under the License.-->
                 <ControlTemplate TargetType="local:CustomDialog">
                     <Popup x:Name="PART_RootPopup" IsLightDismissEnabled="False" IsOpen="{TemplateBinding IsOpen}">
                         <Grid x:Name="PART_RootGrid" Background="#72000000">
-							<ScrollViewer>
+							<ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Auto">
 								<Border x:Name="PART_BannerBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" VerticalAlignment="Center">
 									<Grid x:Name="PART_DialogGrid" Background="{TemplateBinding Background}" VerticalAlignment="Center">
 										<Grid.Resources>
