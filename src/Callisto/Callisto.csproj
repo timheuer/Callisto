@@ -138,6 +138,7 @@
     <Compile Include="Controls\Common\LinearClipper.cs" />
     <Compile Include="Controls\CustomDialog\CustomDialog.cs" />
     <Compile Include="Controls\NumericUpDown\NumericUpDown.cs" />
+    <Compile Include="Controls\RangeSelector\RangeSelector.cs" />
     <Compile Include="Controls\Rating\Rating.cs" />
     <Compile Include="Controls\Rating\RatingItem.cs" />
     <Compile Include="Controls\Rating\RatingSelectionMode.cs" />
@@ -251,7 +252,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="XamlTypeInfoBuildTask.targets" Condition="Exists('XamlTypeInfoBuildTask.targets')" />  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="XamlTypeInfoBuildTask.targets" Condition="Exists('XamlTypeInfoBuildTask.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
