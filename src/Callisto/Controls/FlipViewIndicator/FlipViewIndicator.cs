@@ -45,24 +45,49 @@ namespace Callisto.Controls
                     FlipViewIndicator fvi = (FlipViewIndicator)depobj;
                     FlipView fv = (FlipView)args.NewValue;
 
-                    // this is a special case where ItemsSource is set in code
-                    // and the associated FlipView's ItemsSource may not be available yet
-                    // if it isn't available, let's listen for SelectionChanged 
-                    fv.SelectionChanged += (s, e) =>
+                    if (fv.ItemsSource != null)
                     {
+                        // this is a special case where ItemsSource is set in code
+                        // and the associated FlipView's ItemsSource may not be available yet
+                        // if it isn't available, let's listen for SelectionChanged 
+                        fv.SelectionChanged += (s, e) =>
+                        {
+                            fvi.ItemsSource = fv.ItemsSource;
+                        };
+
                         fvi.ItemsSource = fv.ItemsSource;
-                    };
 
-                    fvi.ItemsSource = fv.ItemsSource;
+                        // create the element binding source
+                        Binding eb = new Binding();
+                        eb.Mode = BindingMode.TwoWay;
+                        eb.Source = fv;
+                        eb.Path = new PropertyPath("SelectedItem");
 
-                    // create the element binding source
-                    Binding eb = new Binding();
-                    eb.Mode = BindingMode.TwoWay;
-                    eb.Source = fv;
-                    eb.Path = new PropertyPath("SelectedItem");
+                        // set the element binding to change selection when the FlipView changes
+                        fvi.SetBinding(FlipViewIndicator.SelectedItemProperty, eb);
+                    }
+                    else if (fv.Items != null && fvi.Items != null)
+                    {
+                        fvi.Items.Clear();
+                        for (int i = 0; i < fv.Items.Count; i++)
+                        {
+                            var item = fv.Items[i] as FlipViewItem;
+                            if (item != null && item.Visibility == Visibility.Visible)
+                            {
+                                fvi.Items.Add(i);
+                            }
+                        }
 
-                    // set the element binding to change selection when the FlipView changes
-                    fvi.SetBinding(FlipViewIndicator.SelectedItemProperty, eb);
+                        // create the element binding source
+                        Binding eb = new Binding();
+                        eb.Mode = BindingMode.TwoWay;
+                        eb.Source = fv;
+                        eb.Path = new PropertyPath("SelectedIndex");
+
+                        // set the element binding to change selection when the FlipView changes
+                        fvi.SetBinding(FlipViewIndicator.SelectedIndexProperty, eb);
+                    }
+
                 }));
     }
 }
